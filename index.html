@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Text Extraction</title>
+    <style>
+        body{
+            background-image: url('https://images.pexels.com/photos/1166644/pexels-photo-1166644.jpeg?auto=compress&cs=tinysrgb&w=600');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        .image-preview {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Text Extraction</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="imageInput">Select an image:</label>
+        <input type="file" id="imageInput" accept="image/*" required>
+        <br><br/>
+        <input type="button" value="Extract Text" onclick="extractText()" title="Extract Text">
+    </form>
+    <h2>Result:</h2>
+    <div id="result"></div>
+    </div>
+
+    <script>
+        function extractText() {
+            var fileInput = document.getElementById('imageInput');
+            var file = fileInput.files[0];
+
+            var formData = new FormData();
+            formData.append('image', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = data.text;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
